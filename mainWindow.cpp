@@ -36,6 +36,7 @@ MainWindow::MainWindow() : QWidget()
     // Result Window
     m_formattedResult = new QTextBrowser;
     m_windowResult = new QDialog(this);
+    m_windowResult->setFixedSize(800, 600);
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(m_formattedResult);
     m_windowResult->setLayout(layout);
@@ -95,10 +96,11 @@ void MainWindow::generateHash()
         QMessageBox::warning(this, "Warning", "No folder selected");
     else
     {
-        t = "<xml>\n\t<folder src=\"" + m_lastSelectedDirectory.split("/").last() + "\">\n";
+        QString m_folderName = m_lastSelectedDirectory.split("\\").last();
+        t = "<xml>\n\t<folder src=\"" + m_lastSelectedDirectory.split(m_folderName).first() + "\" name=\"" + m_folderName + "\">\n";
         foreach (QString str, fileList) {
             h = easyHash(str, QCryptographicHash::Md4);
-            t += "\t\t<file>\n\t\t\t<name>" + str + "</name>\n\t\t\t<hash>"+h+"</hash>\n\t\t</file>\n";
+        t += "\t\t<file>\n\t\t\t<name>" + str.split(m_folderName).last() + "</name>\n\t\t\t<hash>"+h+"</hash>\n\t\t</file>\n";
             }
         t += "\t</folder>\n</xml>";
         m_formattedResult->setText(t);

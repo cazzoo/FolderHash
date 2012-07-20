@@ -8,7 +8,7 @@ Known improvments
 =================
 
 * Show a progressBar during the output generation.
-* Select the algorythm
+* Select the algorythm we want to get the Hash
 * Save the output to a file
 
 About
