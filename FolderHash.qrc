@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="add_folder">resources/images/icons/add_folder.png</file>
+        <file alias="link">resources/images/icons/link.png</file>
+    </qresource>
+    <qresource prefix="/audio"/>
+    <qresource prefix="/images"/>
+</RCC>
