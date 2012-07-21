@@ -52,35 +52,13 @@ void MainWindow::updateList()
 {
     fileList.clear();
     m_fileList->clear();
-    //If we want to go across all sub directories
-    if(m_checkSub->isChecked())
-    {
-        //Looping through the dir and it's sub-dirs
-        QDirIterator dirIterator(m_lastSelectedDirectory, listFilter, QDir::Files | QDir::NoSymLinks, QDirIterator::Subdirectories);
-
-        // While there are results
-        while(dirIterator.hasNext())
-        {
-            fileList << dirIterator.next();
-        }
-    }
-    else
-    {
-        //Looping through the dir and it's sub-dirs
-        QDirIterator dirIterator(m_lastSelectedDirectory, listFilter, QDir::Files | QDir::NoSymLinks);
-
-        // While there are results
-        while(dirIterator.hasNext())
-        {
-            fileList << dirIterator.next();
-        }
-    }
+    (m_checkSub ? fileList << Utils::scanFolder(m_lastSelectedDirectory, true) : fileList << Utils::scanFolder(m_lastSelectedDirectory, false));
     m_fileList->addItems(fileList);
 }
 
 void MainWindow::openFolderDialog()
- {
-   //Update Last Selected Directory
+{
+    //Update Last Selected Directory
     m_lastSelectedDirectory = "";
     QString result = QFileDialog::getExistingDirectory(this);
     if(result != m_lastSelectedDirectory && result != "")
@@ -89,7 +67,7 @@ void MainWindow::openFolderDialog()
         m_SelectedPath->setText(m_lastSelectedDirectory);
     }
     updateList();
- };
+};
 
 void MainWindow::generateHash()
 {
@@ -97,14 +75,7 @@ void MainWindow::generateHash()
         QMessageBox::warning(this, "Warning", "No folder selected");
     else
     {
-        QString m_folderName = m_lastSelectedDirectory.split("\\").last();
-        t = "<xml>\n\t<folder src=\"" + m_lastSelectedDirectory.split(m_folderName).first() + "\" name=\"" + m_folderName + "\">\n";
-        foreach (QString str, fileList) {
-            h = Utils::easyHash(str, QCryptographicHash::Md4);
-        t += "\t\t<file>\n\t\t\t<name>" + str.split(m_folderName).last() + "</name>\n\t\t\t<hash>"+h+"</hash>\n\t\t</file>\n";
-            }
-        t += "\t</folder>\n</xml>";
-        m_formattedResult->setText(t);
+        m_formattedResult->setText(Utils::generateXML(m_lastSelectedDirectory));
         m_windowResult->exec();
     }
 }
