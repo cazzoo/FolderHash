@@ -8,6 +8,8 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input
-HEADERS += mainWindow.h
-SOURCES += main.cpp mainWindow.cpp
+HEADERS += mainWindow.h \
+    utils.h
+SOURCES += main.cpp mainWindow.cpp \
+    utils.cpp
 RESOURCES += FolderHash.qrc

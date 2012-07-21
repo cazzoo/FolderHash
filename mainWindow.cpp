@@ -1,4 +1,5 @@
 #include <mainWindow.h>
+#include <Utils.h>
 
 MainWindow::MainWindow() : QWidget()
 {
@@ -99,23 +100,11 @@ void MainWindow::generateHash()
         QString m_folderName = m_lastSelectedDirectory.split("\\").last();
         t = "<xml>\n\t<folder src=\"" + m_lastSelectedDirectory.split(m_folderName).first() + "\" name=\"" + m_folderName + "\">\n";
         foreach (QString str, fileList) {
-            h = easyHash(str, QCryptographicHash::Md4);
+            h = Utils::easyHash(str, QCryptographicHash::Md4);
         t += "\t\t<file>\n\t\t\t<name>" + str.split(m_folderName).last() + "</name>\n\t\t\t<hash>"+h+"</hash>\n\t\t</file>\n";
             }
         t += "\t</folder>\n</xml>";
         m_formattedResult->setText(t);
         m_windowResult->exec();
     }
-}
-
-QString MainWindow::easyHash(QString &fileName, QCryptographicHash::Algorithm al)
-{
-    QCryptographicHash crypto(al);
-    QFile file(fileName);
-    file.open(QFile::ReadOnly);
-    while(!file.atEnd()){
-      crypto.addData(file.read(8192));
-    }
-    QString hash = crypto.result().toHex();
-    return hash;
 }
