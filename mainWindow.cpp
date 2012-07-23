@@ -52,7 +52,7 @@ void MainWindow::updateList()
 {
     fileList.clear();
     m_fileList->clear();
-    (m_checkSub ? fileList << Utils::scanFolder(m_lastSelectedDirectory, true) : fileList << Utils::scanFolder(m_lastSelectedDirectory, false));
+    (m_checkSub->isChecked() ? fileList << Utils::scanFolder(m_lastSelectedDirectory, true) : fileList << Utils::scanFolder(m_lastSelectedDirectory, false));
     m_fileList->addItems(fileList);
 }
 
@@ -75,7 +75,9 @@ void MainWindow::generateHash()
         QMessageBox::warning(this, "Warning", "No folder selected");
     else
     {
-        m_formattedResult->setText(Utils::generateXML(m_lastSelectedDirectory));
+        QString output = Utils::generateXML(m_lastSelectedDirectory);
+        m_formattedResult->setText(output);
         m_windowResult->exec();
+        Utils::saveFile(m_lastSelectedDirectory.split("\\").last()+".xml", output);
     }
 }

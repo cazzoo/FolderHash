@@ -9,7 +9,7 @@ INCLUDEPATH += .
 
 # Input
 HEADERS += mainWindow.h \
-    utils.h
+    Utils.h
 SOURCES += main.cpp mainWindow.cpp \
-    utils.cpp
+    Utils.cpp
 RESOURCES += FolderHash.qrc
