@@ -6,10 +6,12 @@ TEMPLATE = app
 TARGET = 
 DEPENDPATH += .
 INCLUDEPATH += .
+QT += xml
 
 # Input
 HEADERS += mainWindow.h \
-    Utils.h
+    Utils.h \
+    utilstera.h
 SOURCES += main.cpp mainWindow.cpp \
     Utils.cpp
 RESOURCES += FolderHash.qrc

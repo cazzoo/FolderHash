@@ -42,6 +42,17 @@ MainWindow::MainWindow() : QWidget()
     layout->addWidget(m_formattedResult);
     m_windowResult->setLayout(layout);
 
+    //File loading test. Working now!
+    /*QDomDocument input;
+    Utils::loadFile("BuildDir.xml", input);
+    QMap<QString, QString> map;
+    Utils::generateMap(map, input);
+    QMapIterator<QString, QString> i(map);
+    while (i.hasNext()) {
+        i.next();
+        qDebug() << i.key() << ": " << i.value() << endl;
+    }*/
+
     //SLOTS & SIGNALS
     QObject::connect(m_button, SIGNAL(clicked()), this, SLOT(openFolderDialog()));
     QObject::connect(m_validate, SIGNAL(clicked()), this, SLOT(generateHash()));
@@ -50,10 +61,13 @@ MainWindow::MainWindow() : QWidget()
 
 void MainWindow::updateList()
 {
-    fileList.clear();
-    m_fileList->clear();
-    (m_checkSub->isChecked() ? fileList << Utils::scanFolder(m_lastSelectedDirectory, true) : fileList << Utils::scanFolder(m_lastSelectedDirectory, false));
-    m_fileList->addItems(fileList);
+    if(m_lastSelectedDirectory != "")
+    {
+        fileList.clear();
+        m_fileList->clear();
+        (m_checkSub->isChecked() ? fileList << Utils::scanFolder(m_lastSelectedDirectory, true) : fileList << Utils::scanFolder(m_lastSelectedDirectory, false));
+        m_fileList->addItems(fileList);
+    }
 }
 
 void MainWindow::openFolderDialog()
@@ -75,9 +89,9 @@ void MainWindow::generateHash()
         QMessageBox::warning(this, "Warning", "No folder selected");
     else
     {
-        QString output = Utils::generateXML(m_lastSelectedDirectory);
-        m_formattedResult->setText(output);
+        QDomDocument output = Utils::generateXML(m_lastSelectedDirectory, m_checkSub->isChecked());
+        m_formattedResult->setText(output.toString());
         m_windowResult->exec();
-        Utils::saveFile(m_lastSelectedDirectory.split("\\").last()+".xml", output);
+        Utils::saveFile(m_lastSelectedDirectory.split("\\").last() + ".xml", output);
     }
 }
